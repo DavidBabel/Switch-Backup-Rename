@@ -1,12 +1,17 @@
 const fs = require('fs-extra');
 const { getGamesInfos } = require('./utils/fetch-games-data');
-const { getCurrentGameInfo, cleanXci } = require('./utils/filter-helpers');
+const {
+  getCurrentGameInfo,
+  cleanXci,
+  cleanFileName
+} = require('./utils/filter-helpers');
+const { cwd } = require('./utils/system-helpers');
 
 const outFormat = process.argv[2] || '{base}-{name}.txt';
 
 getGamesInfos()
   .then(gamesInfos => {
-    fs.readdirSync(__dirname).forEach(file => {
+    fs.readdirSync(cwd()).forEach(file => {
       if (file.endsWith('.xci')) {
         const originalName = cleanXci(file);
         const currentGameInfo = getCurrentGameInfo(
@@ -20,7 +25,7 @@ getGamesInfos()
             .replace('{name}', currentGameInfo.name);
 
           try {
-            fs.createFileSync(finalName);
+            fs.createFileSync(cwd(cleanFileName(finalName)));
           } catch (error) {
             // continue
           }

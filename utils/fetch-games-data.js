@@ -3,6 +3,9 @@
 const convert = require('xml-js');
 const fs = require('fs-extra');
 const fetch = require('node-fetch');
+const { cwd } = require('./system-helpers');
+
+const gameFilePath = cwd('games.json');
 
 function fetchGamesDatas() {
   return fetch('http://nswdb.com/xml.php', {
@@ -18,7 +21,7 @@ function fetchGamesDatas() {
     .then(raw => JSON.parse(raw))
     .then(object => object.releases.release)
     .then(games => {
-      const test = games.reduce((previous, next) => {
+      const jsonGames = games.reduce((previous, next) => {
         const filtered = {};
         const keys = Object.keys(next);
         keys.forEach(key => {
@@ -27,7 +30,7 @@ function fetchGamesDatas() {
         previous.push(filtered);
         return previous;
       }, []);
-      return test;
+      return jsonGames;
     })
     .catch(e => `Error ${e}`);
 }
@@ -35,12 +38,13 @@ function fetchGamesDatas() {
 function downloadGamesInfos() {
   return fetchGamesDatas()
     .then(result => {
+      console.log(gameFilePath);
       try {
-        fs.removeSync('games.json');
+        fs.removeSync(gameFilePath);
       } catch (e) {
         // continue
       }
-      fs.writeJsonSync('games.json', {
+      fs.writeJsonSync(gameFilePath, {
         updated: new Date().getTime(),
         datas: result
       });
@@ -55,18 +59,18 @@ function downloadGamesInfos() {
 function getGamesInfos() {
   return new Promise((resolve, reject) => {
     try {
-      const gamesDatas = require('../games.json');
+      const gamesDatas = require(gameFilePath);
       if (new Date().getTime() - gamesDatas.updated > 5 * 24 * 3600 * 1000) {
-        console.log('Old Game file Found: Update ...');
-        throw 'Update Game';
+        console.log('Old games.json file found: Update ...');
+        throw 'Update games.json';
       }
-      console.log('Game File Found');
+      console.log('games.json file found');
       resolve(gamesDatas);
     } catch (error) {
-      console.log('Download Game File ...');
+      console.log('Download games.json file ...');
       return downloadGamesInfos()
         .then(result => {
-          console.log('... Download Finished');
+          console.log('... Download finished');
           return resolve(result);
         })
         .catch(e => {

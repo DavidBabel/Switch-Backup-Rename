@@ -10,6 +10,10 @@ function cleanXci(str) {
   return str.replace('.xci', '').replace('-cut', '');
 }
 
+function cleanFileName(str) {
+  return str.replace(':', ' ');
+}
+
 function getCurrentGameInfo(searchPattern, gamesInfos) {
   for (let i = 0; i < gamesInfos.length; i++) {
     const gameInfos = gamesInfos[i];
@@ -24,5 +28,6 @@ function getCurrentGameInfo(searchPattern, gamesInfos) {
 
 module.exports = {
   getCurrentGameInfo,
-  cleanXci
+  cleanXci,
+  cleanFileName
 };
