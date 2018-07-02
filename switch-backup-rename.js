@@ -40,3 +40,6 @@ getGamesInfos()
     console.log('something went wrong');
     console.log(error);
   });
+
+// prevent windows closing
+setInterval(function() {}, 3000);

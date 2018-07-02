@@ -38,17 +38,17 @@ function fetchGamesDatas() {
 function downloadGamesInfos() {
   return fetchGamesDatas()
     .then(result => {
-      console.log(gameFilePath);
       try {
         fs.removeSync(gameFilePath);
       } catch (e) {
         // continue
       }
-      fs.writeJsonSync(gameFilePath, {
+      const gamesDatas = {
         updated: new Date().getTime(),
         datas: result
-      });
-      return result;
+      };
+      fs.writeJsonSync(gameFilePath, gamesDatas);
+      return gamesDatas;
     })
     .catch(e => {
       console.log('an error occurs', e);
@@ -59,7 +59,7 @@ function downloadGamesInfos() {
 function getGamesInfos() {
   return new Promise((resolve, reject) => {
     try {
-      const gamesDatas = require(gameFilePath);
+      const gamesDatas = JSON.parse(fs.readFileSync(gameFilePath));
       if (new Date().getTime() - gamesDatas.updated > 5 * 24 * 3600 * 1000) {
         console.log('Old games.json file found: Update ...');
         throw 'Update games.json';
@@ -69,9 +69,9 @@ function getGamesInfos() {
     } catch (error) {
       console.log('Download games.json file ...');
       return downloadGamesInfos()
-        .then(result => {
+        .then(gamesDatas => {
           console.log('... Download finished');
-          return resolve(result);
+          return resolve(gamesDatas);
         })
         .catch(e => {
           reject(e);
