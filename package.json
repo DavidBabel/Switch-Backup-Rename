@@ -1,0 +1,24 @@
+{
+  "name": "switch-backup-rename",
+  "version": "1.0.0",
+  "main": "switch-backup-rename.js",
+  "repository": "git@github.com:DavidBabel/Switch-Backup-Rename.git",
+  "author": "David B <babel.david@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node switch-backup-rename.js",
+    "clean": "rm ./*.txt ./build",
+    "build": "pkg --targets linux,macos,win --out-path build switch-backup-rename.js",
+    "compress": "cd ./build/ && ls | xargs -I {} zip {}.zip {}"
+  },
+  "devDependencies": {
+    "pkg": "^4.3.3"
+  },
+  "dependencies": {
+    "fs-extra": "^6.0.1",
+    "global": "^4.3.2",
+    "node-fetch": "^2.1.2",
+    "nodemon": "^1.17.5",
+    "xml-js": "^1.6.4"
+  }
+}

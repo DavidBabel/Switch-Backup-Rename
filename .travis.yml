@@ -1,0 +1,21 @@
+language: node_js
+
+node_js:
+- '10'
+
+install:
+- yarn install
+
+script:
+- yarn build
+- yarn compress
+
+deploy:
+  provider: releases
+  api-key:
+    secure: YcDebsFdTyIU06DAzpCjmjTSg/8MzR/xHZJMP0G9NA6hce2+c7i8iprtT5ka53sYpoUDtZDf16NgbvvWrQtbfr1RR3XbH0hQyMVbHasPeWOziQRE5NrVvTmTBDGBCAa2fXS8h5RaKP+v7iKzLNjm1YM4fswNPZShXe9lTAFZYlYzvDJRLTNExvKp5OkfraX6R93VcyuFVrHsE/oE0s2ZgpvtCaCgAyFC9nUSSpSa0bVEfPhewthUtjQ7B/CCW3giLh78k0U7dqHmcQ7QlakSyiOnl4AxHARKL7cElEdPRatuSWLSHMd+MdSjauB57zlpcAGLmaJcEh7EUce6Z6yTZ6y3Ftl9fduE5o/eAvRgzhZQSq/+eOHnvaeg1+hyNV66z6y8PhHU2qlHdXf+nXyNggSXGZaV/Jpzz4iU+UvmqdUx8Np5sOX57oC01OENXE3AJioeD7S0SMrHNm4b2cVzoyhkbC/62T2qtJ8RgbXuI2zlcV8w4v1bd5+ZibVsgr9TuzUfRUVLphdMbqvpsAi1iG6z2FH+3PNyvosb9B5RvxRZDno4WMk+YehBjodw7VIpINXl3I8iUQda0u1nLcPV9Mccx3OqSgyknhCAu6/WACO17izH22zz1WOI2VZq6oyZTHY4YXU13FvBXrBiUFFE6aCUTKuSybhOUCCPk9yH8BI=
+  file_glob: true
+  file: build/*.zip
+  skip_cleanup: true
+  on:
+    tags: true
