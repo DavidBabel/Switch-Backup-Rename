@@ -7,7 +7,7 @@ function sanitizeSerial(str) {
 }
 
 function cleanXci(str) {
-  return str.replace('.xci', '').replace('-cut', '');
+  return str.replace('.xci', '');
 }
 
 function cleanFileName(str) {
