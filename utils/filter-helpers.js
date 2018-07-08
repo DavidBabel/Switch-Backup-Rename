@@ -11,7 +11,10 @@ function cleanXci(str) {
 }
 
 function cleanFileName(str) {
-  return str.replace(':', ' ');
+  return str
+    .replace(':', ' ')
+    .replace('/', ' ')
+    .replace(/\s\s+/g, ' ');
 }
 
 function getCurrentGameInfo(searchPattern, gamesInfos) {
@@ -27,6 +30,7 @@ function getCurrentGameInfo(searchPattern, gamesInfos) {
 }
 
 module.exports = {
+  sanitizeSerial,
   getCurrentGameInfo,
   cleanXci,
   cleanFileName
