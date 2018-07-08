@@ -2,8 +2,10 @@
 
 Easy way to rename your switch backups.
 
-By convension, backups have name like "serial".xci. And add it to the root of your SD card can be annoying.
+By convention, backups have name like "serial".xci. And add it to the root of your SD card can be annoying.
 
-For now, this app fetch an online database and add a .txt file with more infos in the same directory as the xci files.
+This app fetch an online database and rename the xci file with the name followed by the serial, alowing system search for both and alphabetical sorting.
+
+![renamed files](https://i.imgur.com/eILjsoh.png)
 
 **Note:** that i did it to my personnal usage. It will be maintained only if users like it.
