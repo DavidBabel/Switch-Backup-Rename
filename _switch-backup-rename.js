@@ -3,19 +3,20 @@ const { getGamesInfos } = require('./utils/fetch-games-data');
 const {
   getCurrentGameInfo,
   sanitizeSerial,
-  cleanXci,
+  cleanExtension,
   cleanFileName
 } = require('./utils/filter-helpers');
 const { cwd } = require('./utils/system-helpers');
 
 const outFormat = process.argv[2] || '{name}-{short-serial}.{ext}';
+let done = false;
 
 getGamesInfos()
   .then(gamesInfos => {
     fs.readdirSync(cwd()).forEach(file => {
       if (file.endsWith('.xci') || file.endsWith('.nsp')) {
         const originalExtension = file.substr(file.length - 3);
-        const originalName = cleanXci(file);
+        const originalName = cleanExtension(file);
         const currentGameInfo = getCurrentGameInfo(
           originalName,
           gamesInfos.datas
@@ -25,24 +26,28 @@ getGamesInfos()
           const finalName = outFormat
             .replace('{base}', originalName)
             .replace('{name}', currentGameInfo.name)
-            .replace(
-              '{short-serial}',
-              sanitizeSerial(currentGameInfo.serial.toLowerCase())
-            )
+            .replace('{short-serial}', sanitizeSerial(currentGameInfo.serial))
             .replace('{serial}', currentGameInfo.serial.toLowerCase())
             .replace('{ext}', originalExtension);
 
           try {
             fs.renameSync(cwd(file), cwd(cleanFileName(finalName)));
+            done = true;
           } catch (error) {
             // continue
           }
         } else {
-          `Game infos not found for ${file}`;
+          console.log(
+            `- game infos not found in database yet for ${originalName}`
+          );
         }
       }
     });
-    console.log('Files written');
+    if (done) {
+      console.log('Game Files renamed');
+    } else {
+      console.log('Nothing to do');
+    }
   })
   .catch(error => {
     console.log('something went wrong');

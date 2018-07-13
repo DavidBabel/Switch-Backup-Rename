@@ -60,7 +60,7 @@ function getGamesInfos() {
   return new Promise((resolve, reject) => {
     try {
       const gamesDatas = JSON.parse(fs.readFileSync(gameFilePath));
-      if (new Date().getTime() - gamesDatas.updated > 5 * 24 * 3600 * 1000) {
+      if (new Date().getTime() - gamesDatas.updated > 1 * 24 * 3600 * 1000) {
         console.log('Old games.json file found: Update ...');
         throw 'Update games.json';
       }
