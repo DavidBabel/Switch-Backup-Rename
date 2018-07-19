@@ -1,9 +1,12 @@
 function sanitizeSerial(str) {
   return str
     .toLowerCase()
-    .replace('la-h-', '')
-    .replace('bbb-h-', '')
-    .replace('hr-', '');
+    .replace(/^la-h-/, '')
+    .replace(/^bbb-h-/, '')
+    .replace(/^cat-/, '')
+    .replace(/^lfc-/, '')
+    .replace(/^v-/, '')
+    .replace(/^hr-/, '');
 }
 
 function cleanXci(str) {
@@ -12,8 +15,15 @@ function cleanXci(str) {
 
 function cleanFileName(str) {
   return str
-    .replace(':', ' ')
-    .replace('/', ' ')
+    .replace(/:/g, ' ')
+    .replace(/\*/g, ' ')
+    .replace(/\//g, ' ')
+    .replace(/\\/g, ' ')
+    .replace(/\?/g, ' ')
+    .replace(/"/g, ' ')
+    .replace(/</g, ' ')
+    .replace(/>/g, ' ')
+    .replace(/\|/g, ' ')
     .replace(/\s\s+/g, ' ');
 }
 
