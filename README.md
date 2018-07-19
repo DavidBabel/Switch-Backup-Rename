@@ -1,7 +1,7 @@
 # Switch-Backup-Rename
 
 Easy way to rename your switch backups.
-Just put the program in the same directory of your backups, en launch it.
+Just put the program in the same directory of your backups, and launch it.
 
 By convention, backups have name like "serial".xci. And add it to the root of your SD card can be annoying.
 
