@@ -2,7 +2,8 @@ function sanitizeSerial(str) {
   return str
     .toLowerCase()
     .replace(/^la-n-/, '')
-    .replace(/^la-h-/, '');
+    .replace(/^la-h-/, '')
+    .trim();
 }
 
 function sanitizeFileName(str) {
@@ -46,6 +47,7 @@ function cleanFileName(str) {
       .replace(/>/g, ' ')
       .replace(/\|/g, ' ')
       .replace(/\s\s+/g, ' ')
+      .trim()
   );
 }
 

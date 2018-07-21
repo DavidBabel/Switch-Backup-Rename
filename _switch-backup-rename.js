@@ -24,11 +24,11 @@ getGamesInfos()
 
         if (currentGameInfo) {
           const finalName = outFormat
-            .replace('{base}', originalName)
-            .replace('{name}', currentGameInfo.name)
+            .replace('{base}', originalName.trim())
+            .replace('{name}', currentGameInfo.name.trim())
             .replace('{short-serial}', sanitizeSerial(currentGameInfo.serial))
-            .replace('{serial}', currentGameInfo.serial.toLowerCase())
-            .replace('{ext}', originalExtension);
+            .replace('{serial}', currentGameInfo.serial.toLowerCase().trim())
+            .replace('{ext}', originalExtension.trim());
 
           try {
             fs.renameSync(cwd(file), cwd(cleanFileName(finalName)));
