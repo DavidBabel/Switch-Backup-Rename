@@ -25,6 +25,7 @@ function cleanExtension(str) {
 function cleanFileName(str) {
   return str
     .replace(/:/g, ' ')
+    .replace(/\+/g, ' ')
     .replace(/\*/g, ' ')
     .replace(/\//g, ' ')
     .replace(/\\/g, ' ')
