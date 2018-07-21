@@ -28,7 +28,7 @@ getGamesInfos()
             .replace('{name}', currentGameInfo.name.trim())
             .replace('{short-serial}', sanitizeSerial(currentGameInfo.serial))
             .replace('{serial}', currentGameInfo.serial.toLowerCase().trim())
-            .replace('{ext}', originalExtension.trim());
+            .replace('{ext}', originalExtension);
 
           try {
             fs.renameSync(cwd(file), cwd(cleanFileName(finalName)));

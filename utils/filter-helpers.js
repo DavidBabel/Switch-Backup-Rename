@@ -20,7 +20,10 @@ function sanitizeFileName(str) {
 }
 
 function cleanExtension(str) {
-  return str.replace(/.xci$/, '').replace(/.nsp$/, '');
+  return str
+    .replace(/.xci$/, '')
+    .replace(/.nsp$/, '')
+    .trim();
 }
 
 function keepOnlyOneDot(str) {
