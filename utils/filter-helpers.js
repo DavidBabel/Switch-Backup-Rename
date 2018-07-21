@@ -22,19 +22,31 @@ function cleanExtension(str) {
   return str.replace(/.xci$/, '').replace(/.nsp$/, '');
 }
 
+function keepOnlyOneDot(str) {
+  const elements = str.split('.');
+  const ext = elements.pop();
+  return elements.join(' ') + '.' + ext;
+}
+
 function cleanFileName(str) {
-  return str
-    .replace(/:/g, ' ')
-    .replace(/\+/g, ' ')
-    .replace(/\*/g, ' ')
-    .replace(/\//g, ' ')
-    .replace(/\\/g, ' ')
-    .replace(/\?/g, ' ')
-    .replace(/"/g, ' ')
-    .replace(/</g, ' ')
-    .replace(/>/g, ' ')
-    .replace(/\|/g, ' ')
-    .replace(/\s\s+/g, ' ');
+  return keepOnlyOneDot(
+    str
+      .replace(/:/g, ' ')
+      .replace(/\+/g, ' ')
+      .replace(/{/g, ' ')
+      .replace(/}/g, ' ')
+      .replace(/_/g, ' ')
+      .replace(/\*/g, ' ')
+      .replace(/\//g, ' ')
+      .replace(/\\/g, ' ')
+      .replace(/\?/g, ' ')
+      .replace(/!/g, ' ')
+      .replace(/"/g, ' ')
+      .replace(/</g, ' ')
+      .replace(/>/g, ' ')
+      .replace(/\|/g, ' ')
+      .replace(/\s\s+/g, ' ')
+  );
 }
 
 function getCurrentGameInfo(searchPattern, gamesInfos) {
