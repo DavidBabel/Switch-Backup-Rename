@@ -7,6 +7,7 @@
   "license": "MIT",
   "scripts": {
     "start": "node _switch-backup-rename.js",
+    "dev": "./build/_switch-backup-rename-macos",
     "clean": "rm -rf ./build",
     "build": "pkg --targets linux,macos,win --out-path build _switch-backup-rename.js",
     "compress": "cd ./build/ && ls | xargs -I {} zip {}.zip {}"

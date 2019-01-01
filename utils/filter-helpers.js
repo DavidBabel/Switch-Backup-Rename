@@ -74,6 +74,16 @@ function getCurrentGameInfo(searchPattern, gamesInfos) {
       }
     }
   }
+  // fallback on releasename
+  for (let i = 0; i < gamesInfos.length; i++) {
+    const gameInfos = gamesInfos[i];
+    if (gameInfos.releasename) {
+      const regexp = new RegExp(sanitizeFileName(gameInfos.releasename));
+      if (regexp.test(searchPattern.toLowerCase())) {
+        return gameInfos;
+      }
+    }
+  }
   return false;
 }
 
