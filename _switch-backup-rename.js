@@ -1,4 +1,6 @@
 const fs = require('fs-extra');
+const accents = require('remove-accents');
+
 const { getGamesInfos } = require('./utils/fetch-games-data');
 const {
   getCurrentGameInfo,
@@ -31,7 +33,10 @@ getGamesInfos()
             .replace('{ext}', originalExtension);
 
           try {
-            fs.renameSync(cwd(file), cwd(cleanFileName(finalName)));
+            fs.renameSync(
+              cwd(file),
+              cwd(cleanFileName(accents.remove(finalName)))
+            );
             done = true;
           } catch (error) {
             // continue

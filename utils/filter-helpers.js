@@ -39,6 +39,7 @@ function cleanFileName(str) {
       .replace(/\+/g, ' ')
       .replace(/{/g, ' ')
       .replace(/}/g, ' ')
+      .replace(/,/g, ' ')
       .replace(/_/g, ' ')
       .replace(/\*/g, ' ')
       .replace(/\//g, ' ')
