@@ -57,17 +57,21 @@ function cleanFileName(str) {
 function getCurrentGameInfo(searchPattern, gamesInfos) {
   for (let i = 0; i < gamesInfos.length; i++) {
     const gameInfos = gamesInfos[i];
-    const regexp = new RegExp(sanitizeSerial(gameInfos.serial));
-    if (regexp.test(searchPattern.toLowerCase())) {
-      return gameInfos;
+    if (gameInfos.serial) {
+      const regexp = new RegExp(sanitizeSerial(gameInfos.serial));
+      if (regexp.test(searchPattern.toLowerCase())) {
+        return gameInfos;
+      }
     }
   }
   // fallback on filename
   for (let i = 0; i < gamesInfos.length; i++) {
     const gameInfos = gamesInfos[i];
-    const regexp = new RegExp(sanitizeFileName(gameInfos.filename));
-    if (regexp.test(searchPattern.toLowerCase())) {
-      return gameInfos;
+    if (gameInfos.filename) {
+      const regexp = new RegExp(sanitizeFileName(gameInfos.filename));
+      if (regexp.test(searchPattern.toLowerCase())) {
+        return gameInfos;
+      }
     }
   }
   return false;
