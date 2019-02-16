@@ -1,3 +1,6 @@
+const levenshtein = require('js-levenshtein');
+var readlineSync = require('readline-sync');
+
 function sanitizeSerial(str) {
   return str
     .toLowerCase()
@@ -16,7 +19,9 @@ function sanitizeFileName(str) {
     .replace(/^.*?lfc-/, '')
     .replace(/^.*?v-/, '')
     .replace(/^.*?hr-/, '')
-    .replace('-cut', '');
+    .replace('-cut', '')
+    .replace(/[^a-zA-Z0-9+]/g,'');
+
 }
 
 function cleanExtension(str) {
@@ -55,12 +60,28 @@ function cleanFileName(str) {
   );
 }
 
+function userValidation(searchPattern, gameName) { 
+  console.log(
+    `- We matched the file named: '${searchPattern}' against the game found in the database : '${gameName}'`
+ );
+    
+ // Wait for user's response.
+  var answer = readlineSync.question('Could you confirm this match is correct? (y/n)');
+ 
+  if (answer == 'y') {
+     return true;
+  }
+
+  return false;
+};
+
 function getCurrentGameInfo(searchPattern, gamesInfos) {
+  var sanitizedSearchPattern = sanitizeFileName(searchPattern);
+
   for (let i = 0; i < gamesInfos.length; i++) {
     const gameInfos = gamesInfos[i];
     if (gameInfos.serial) {
-      const regexp = new RegExp(sanitizeSerial(gameInfos.serial));
-      if (regexp.test(searchPattern.toLowerCase())) {
+      if (sanitizedSearchPattern.includes(sanitizeSerial(gameInfos.serial))) {
         return gameInfos;
       }
     }
@@ -69,22 +90,50 @@ function getCurrentGameInfo(searchPattern, gamesInfos) {
   for (let i = 0; i < gamesInfos.length; i++) {
     const gameInfos = gamesInfos[i];
     if (gameInfos.filename) {
-      const regexp = new RegExp(sanitizeFileName(gameInfos.filename));
-      if (regexp.test(searchPattern.toLowerCase())) {
+      if (sanitizedSearchPattern.includes(sanitizeSerial(gameInfos.filename))) {
         return gameInfos;
       }
     }
   }
-  // fallback on releasename
+  // This one is maybe useless now ? 
+  // for (let i = 0; i < gamesInfos.length; i++) {
+  //   const gameInfos = gamesInfos[i];
+  //   if (gameInfos.releasename) {
+  //     if (sanitizeSerial(gameInfos.releasename).includes(sanitizedSearchPattern)) {
+  //       return gameInfos;
+  //     }
+  //   }
+  // }
+
+  // fallback on name
   for (let i = 0; i < gamesInfos.length; i++) {
     const gameInfos = gamesInfos[i];
-    if (gameInfos.releasename) {
-      const regexp = new RegExp(sanitizeFileName(gameInfos.releasename));
-      if (regexp.test(searchPattern.toLowerCase())) {
-        return gameInfos;
+    if (gameInfos.name) {
+      var sanitizedName = sanitizeFileName(gameInfos.name);
+      
+      var alreadyCheckByUser = false;
+      // Check first if the name of the game match somewhere
+      if (sanitizedName.includes(sanitizedSearchPattern) || sanitizedSearchPattern.includes(sanitizedName)) {
+        if (userValidation(searchPattern, gameInfos.name)) {
+          return gameInfos;
+        }
+        alreadyCheckByUser = true;
+      }
+      
+      // Last change using the levenshtein algorithm + user control
+      var levenshteinDistance = levenshtein(sanitizedName, sanitizedSearchPattern);
+      var result = (1 - levenshteinDistance/Math.max(sanitizedName.length,sanitizedSearchPattern.length)) * 100;
+
+       if ( result >= 75 && !alreadyCheckByUser) { 
+         // Comment this out if you want to debug :) (except the return)
+        if (userValidation(searchPattern, gameInfos.name)) {
+          return gameInfos;
+        }
       }
     }
   }
+
+
   return false;
 }
 

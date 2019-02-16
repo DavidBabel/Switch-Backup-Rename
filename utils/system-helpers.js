@@ -1,7 +1,11 @@
 const path = require('path');
 
 function cwd(additionnalPath = '') {
-  return path.join(path.dirname(process.execPath), additionnalPath);
+  var pathToUse = path.dirname(process.execPath);
+  // Uncomment this for debugging purpose 
+  // pathToUse = __dirname + "\\..\\debug";
+
+  return path.join(pathToUse, additionnalPath);
 }
 
 module.exports = {

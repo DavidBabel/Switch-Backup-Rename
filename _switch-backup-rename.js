@@ -10,8 +10,11 @@ const {
 } = require('./utils/filter-helpers');
 const { cwd } = require('./utils/system-helpers');
 
-const outFormat = process.argv[2] || '{name}-{short-serial}.{ext}';
+const outFormat = process.argv[2] || '{name}[{titleId}]-{short-serial}.{ext}';
 let done = false;
+let fileChanges = '';
+let fileNotFound = '';
+
 
 getGamesInfos()
   .then(gamesInfos => {
@@ -28,30 +31,40 @@ getGamesInfos()
           const finalName = outFormat
             .replace('{base}', originalName.trim())
             .replace('{name}', currentGameInfo.name.trim())
+            .replace('{titleId}',currentGameInfo.titleid.trim())
             .replace('{short-serial}', sanitizeSerial(currentGameInfo.serial))
             .replace('{serial}', currentGameInfo.serial.toLowerCase().trim())
             .replace('{ext}', originalExtension);
 
-          try {
-            fs.renameSync(
-              cwd(file),
-              cwd(cleanFileName(accents.remove(finalName)))
-            );
-            done = true;
-          } catch (error) {
-            // continue
+
+          const cleanedFileName = cleanFileName(accents.remove(finalName));
+          if(cleanedFileName != file) {
+            try {
+              fs.renameSync(
+                cwd(file),
+                cwd(cleanedFileName)
+              );
+              fileChanges += `- ${file} renamed into ${cleanedFileName}\n`
+              done = true;
+            } catch (error) {
+              // continue
+            }
           }
         } else {
-          console.log(
-            `- game infos not found in database yet for ${originalName}`
-          );
+          fileNotFound += `- game infos not found in database yet for ${originalName}\n`
         }
       }
     });
     if (done) {
-      console.log('Game Files renamed');
+      console.log('\n\nGame Files renamed:');
+      console.log(fileChanges);
     } else {
       console.log('Nothing to do');
+    }
+
+    if (fileNotFound) {
+      console.log('\n\nGame Files not found:');
+      console.log(fileNotFound);
     }
   })
   .catch(error => {

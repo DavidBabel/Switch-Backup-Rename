@@ -2,3 +2,4 @@ node_modules
 build
 games.json
 *.xci
+!debug/*.xci
