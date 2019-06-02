@@ -59,9 +59,11 @@ function getCurrentGameInfo(searchPattern, gamesInfos) {
   for (let i = 0; i < gamesInfos.length; i++) {
     const gameInfos = gamesInfos[i];
     if (gameInfos.serial) {
-      const regexp = new RegExp(sanitizeSerial(gameInfos.serial));
-      if (regexp.test(searchPattern.toLowerCase())) {
-        return gameInfos;
+      if (!/\?\?\?\?\?/.test(gameInfos.serial)) {
+        const regexp = new RegExp(sanitizeSerial(gameInfos.serial));
+        if (regexp.test(searchPattern.toLowerCase())) {
+          return gameInfos;
+        }
       }
     }
   }
